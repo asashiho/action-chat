@@ -1,0 +1,3 @@
+# Ruby on Rails for Application Deployment
+FROM ror-base
+LABEL maintainer “Shiho ASA<asashiho@mail.asa.yokohama>”

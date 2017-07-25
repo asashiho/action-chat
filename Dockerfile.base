@@ -1,0 +1,24 @@
+# Ruby on Rails with Ruby2.3
+FROM ruby:2.3
+LABEL maintainer “Shiho ASA<asashiho@mail.asa.yokohama>”
+
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1
+
+# Deploy Application using ONBUILD
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ONBUILD COPY Gemfile /usr/src/app/
+ONBUILD COPY Gemfile.lock /usr/src/app/
+ONBUILD RUN bundle install
+ONBUILD COPY . /usr/src/app
+
+# Install SQLite3
+RUN apt-get update && apt-get install -y sqlite3 --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# Port
+EXPOSE 3000
+
+# Run Rails Application
+CMD ["bin/rails", "server", "-b", "0.0.0.0"]
